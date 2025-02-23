@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '/data/item_suggestions.dart'; // Importa o mapa de categorias e sugestões
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -8,24 +9,25 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // Controlador do TextField
   final TextEditingController _controller = TextEditingController();
-
-  // Variável para armazenar o nome
   String? _nomeDaLista;
+  String? _categoriaSelecionada;
 
-  // Função para capturar o nome e atualizar o estado
   void _salvarNome() {
     setState(() {
-      _nomeDaLista = _controller.text; // Armazena o nome digitado
+      _nomeDaLista = _controller.text;
     });
-    _controller.clear(); // Limpa o campo de texto após salvar
+    _controller.clear();
   }
 
-  @override
-  void dispose() {
-    _controller.dispose(); // Libera o controlador quando o widget for destruído
-    super.dispose();
+  List<Widget> _mostrarItensRecomendados() {
+    if (_categoriaSelecionada != null) {
+      final itens = itemSuggestions[_categoriaSelecionada];
+      if (itens != null) {
+        return itens.map((item) => ListTile(title: Text(item))).toList();
+      }
+    }
+    return [];
   }
 
   @override
@@ -35,37 +37,66 @@ class _HomeScreenState extends State<HomeScreen> {
         title: const Text('Minha Lista'),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // TextField para o nome da lista
-            TextField(
-              controller: _controller, // Vincula o controller
-              decoration: const InputDecoration(
-                labelText: 'Nome da lista',
-                border: OutlineInputBorder(),
+      body: SingleChildScrollView( // Envolvendo o conteúdo com SingleChildScrollView
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextField(
+                controller: _controller,
+                decoration: const InputDecoration(
+                  labelText: 'Nome da lista',
+                  border: OutlineInputBorder(),
+                ),
               ),
-            ),
-            const SizedBox(height: 20),
-
-            // Botão para salvar o nome da lista
-            ElevatedButton(
-              onPressed: _salvarNome,
-              child: const Text('Salvar Nome'),
-            ),
-            const SizedBox(height: 20),
-
-            // Exibir o nome da lista, se não for nulo
-            if (_nomeDaLista != null)
-              Text(
-                'Nome da lista: $_nomeDaLista',
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _salvarNome,
+                child: const Text('Salvar Nome'),
               ),
-          ],
+              const SizedBox(height: 20),
+              if (_nomeDaLista != null)
+                Text(
+                  'Nome da lista: $_nomeDaLista',
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              const SizedBox(height: 20),
+              const Text(
+                'Categorias:',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 10),
+              Column(
+                children: itemSuggestions.keys.map((categoria) {
+                  return ListTile(
+                    title: Text(categoria),
+                    onTap: () {
+                      setState(() {
+                        _categoriaSelecionada = categoria;
+                      });
+                    },
+                  );
+                }).toList(),
+              ),
+              const SizedBox(height: 20),
+              if (_categoriaSelecionada != null)
+                const Text(
+                  'Itens recomendados:',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              const SizedBox(height: 10),
+              ..._mostrarItensRecomendados(),
+            ],
+          ),
         ),
       ),
-      );
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Ação ao pressionar o FAB
+        },
+        child: const Icon(Icons.add),
+      ),
+    );
   }
 }
