@@ -1,4 +1,4 @@
-# **Lista de Compras com IA**
+# **Lista de Compras com IA (Compra.Ai)**
 
 ## **📄 Descrição**
 
