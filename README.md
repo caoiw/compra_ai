@@ -18,11 +18,14 @@ Status: 🚧 Em Desenvolvimento - O projeto ainda está em andamento e novas fun
 
 ---
 
-## **🚀 Tecnologias Usadas**
+## **🚀 Tecnologias e Ferramentas Utilizadas**
 
 - **Flutter**: Framework para criação de aplicativos móveis.
 - **Git/GitHub**: Para versionamento de código e controle de alterações no projeto.
 - **VS Code**: Editor de código utilizado no desenvolvimento.
+- **Readme.so**: Ferramenta usada para ajudar na criação e estruturação deste README.
+- **ChatGPT**: Assistente de IA para gerar e otimizar código Dart durante o desenvolvimento.
+- **ChooseALicense**: Utilizado para gerar a licença do projeto.
 
 ---
 
